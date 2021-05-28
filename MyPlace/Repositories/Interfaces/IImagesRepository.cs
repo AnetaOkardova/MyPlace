@@ -9,5 +9,8 @@ namespace MyPlace.Repositories.Interfaces
     public interface IImagesRepository
     {
         List<Image> GetAllPublicWithFilter(string username);
+        List<Image> GetAllByUserId(string id);
+        Image GetById(int id);
+        void Update(Image image);
     }
 }

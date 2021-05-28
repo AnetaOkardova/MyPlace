@@ -1,4 +1,5 @@
-﻿using MyPlace.Models;
+﻿using MyPlace.DtoModels;
+using MyPlace.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,8 @@ namespace MyPlace.Services.Interfaces
     public interface IImagesServices
     {
         List<Image> GetAllPublicWithFilter(string username);
+        List<Image> GetAllByUserId(string id);
+        Image GetById(int id);
+        StatusModel Update(Image image);
     }
 }
