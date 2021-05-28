@@ -1,0 +1,23 @@
+﻿.imageDescription {
+    overflow: hidden;
+    width: 16rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.imageCard {
+    width: 300px;
+    transition: ease-out width 1s, ease-out background-color 1s;
+}
+
+    .imageCard:hover {
+        width: 350px;
+        background-color: gray;
+        padding: 0px;
+    }
+
+.imageImg {
+    height: 250px;
+    width: 250px;
+}

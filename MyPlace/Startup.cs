@@ -8,6 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyPlace.Data;
+using MyPlace.Models;
+using MyPlace.Repositories;
+using MyPlace.Repositories.Interfaces;
+using MyPlace.Services;
+using MyPlace.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +35,7 @@ namespace MyPlace
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("MyPlaceDB")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -41,6 +46,8 @@ namespace MyPlace
                 //options.LoginPath = "/admin/login";
             });
 
+            services.AddTransient<IImagesRepository, ImagesRepository>();
+            services.AddTransient<IImagesServices, ImagesServices>();
 
         }
 
@@ -70,7 +77,7 @@ namespace MyPlace
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Overview}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
