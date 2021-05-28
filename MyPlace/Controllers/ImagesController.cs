@@ -56,7 +56,7 @@ namespace MyPlace.Controllers
             return View(image.ToImageViewModel());
         }
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var imageFromDb = _imagesService.GetById(id);
             if (imageFromDb == null)
@@ -64,12 +64,23 @@ namespace MyPlace.Controllers
                 return RedirectToAction("Error", "Home", new { ErrorMessage = $"There is no hotel with Id: {id}." });
             }
 
+            var user = User;
+            var userFromDb = await _userManager.FindByEmailAsync(user.Identity.Name);
+
+            var isAllowedToEdit = _imagesService.CouldEdit(imageFromDb.Id, userFromDb.Id);
+            if (!isAllowedToEdit)
+            {
+                return RedirectToAction("Overview", "Home", new { ErrorMessage = "You have no authorization to edit this image." });
+            }
+
+            
+
             var imageForView = imageFromDb.ToImageViewModel();
 
             return View(imageForView);
         }
         [HttpPost]
-        public IActionResult Edit(ImageViewModel imageViewModel)
+        public  IActionResult Edit(ImageViewModel imageViewModel)
         {
             if (!ModelState.IsValid)
             {

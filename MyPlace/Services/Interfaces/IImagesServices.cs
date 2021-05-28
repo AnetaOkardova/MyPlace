@@ -15,5 +15,6 @@ namespace MyPlace.Services.Interfaces
         StatusModel Update(Image image);
         void Delete(Image image);
         void Create(Image image, string userId);
+        bool CouldEdit(int imageId, string userId);
     }
 }

@@ -14,5 +14,6 @@ namespace MyPlace.Repositories.Interfaces
         void Update(Image image);
         void Delete(Image image);
         void Create(Image image);
+        bool CouldEdit(int imageId, string userId);
     }
 }

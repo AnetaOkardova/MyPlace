@@ -56,5 +56,15 @@ namespace MyPlace.Repositories
             _context.Images.Add(image);
             _context.SaveChanges();
         }
+
+        public bool CouldEdit(int imageId, string userId)
+        {
+            var image = _context.Images.Include(x=>x.User).FirstOrDefault(x=>x.Id == imageId && x.UserId == userId) ;
+            if(image == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

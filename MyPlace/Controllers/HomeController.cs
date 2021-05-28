@@ -19,12 +19,16 @@ namespace MyPlace.Controllers
         {
             _imagesService = imagesService;
         }
-        public IActionResult Overview(string userNameSearch)
+        public IActionResult Overview(string userNameSearch, string errorMessage)
         {
            var allPublicImages =  _imagesService.GetAllPublicWithFilter(userNameSearch);
-            if (allPublicImages == null)
+            if (allPublicImages.Count == 0)
             {
                 ViewBag.Message = "There are no images to show";
+            }
+            if (errorMessage != null)
+            {
+                ViewBag.ErrorMessage = errorMessage;
             }
             var viewImages = allPublicImages.Select(x => x.ToImageViewModel()).ToList();
 

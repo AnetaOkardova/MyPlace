@@ -18,6 +18,11 @@ namespace MyPlace.Services
             _imagesRepository = imagesRepository;
         }
 
+        public bool CouldEdit(int imageId, string userId)
+        {
+            return _imagesRepository.CouldEdit(imageId, userId);
+        }
+
         public void Create(Image image, string userId)
         {
             image.DateCreated = DateTime.Now;
