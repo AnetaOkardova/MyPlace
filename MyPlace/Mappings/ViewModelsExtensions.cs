@@ -19,5 +19,14 @@ namespace MyPlace.Mappings
                 DateCreated = entity.DateCreated
             };
         }
+        public static Image ToModel(this CreateImageViewModel entity)
+        {
+            return new Image()
+            {
+                ImageUrl = entity.ImageUrl,
+                IsPrivate = entity.IsPrivate,
+            };
+        }
+        
     }
 }

@@ -18,6 +18,19 @@ namespace MyPlace.Services
             _imagesRepository = imagesRepository;
         }
 
+        public void Create(Image image, string userId)
+        {
+            image.DateCreated = DateTime.Now;
+            image.DateModified = DateTime.Now;
+            image.UserId = userId;
+            _imagesRepository.Create(image);
+        }
+
+        public void Delete(Image image)
+        {
+            _imagesRepository.Delete(image);
+        }
+
         public List<Image> GetAllByUserId(string id)
         {
             return _imagesRepository.GetAllByUserId(id);

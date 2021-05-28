@@ -19,7 +19,7 @@ namespace MyPlace.Repositories
 
         public List<Image> GetAllPublicWithFilter(string username)
         {
-            var query = _context.Images.Include(x => x.User).Where(x => x.IsPrivate == true).AsQueryable();
+            var query = _context.Images.Include(x => x.User).Where(x => x.IsPrivate == false).AsQueryable();
             if (username != null)
             {
                 query = query.Where(x => x.User.UserName.Contains(username));
@@ -42,6 +42,18 @@ namespace MyPlace.Repositories
         public void Update(Image image)
         {
             _context.Images.Update(image);
+            _context.SaveChanges();
+        }
+
+        public void Delete(Image image)
+        {
+            _context.Images.Remove(image);
+            _context.SaveChanges();
+        }
+
+        public void Create(Image image)
+        {
+            _context.Images.Add(image);
             _context.SaveChanges();
         }
     }

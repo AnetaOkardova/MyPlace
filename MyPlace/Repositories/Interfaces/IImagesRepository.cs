@@ -12,5 +12,7 @@ namespace MyPlace.Repositories.Interfaces
         List<Image> GetAllByUserId(string id);
         Image GetById(int id);
         void Update(Image image);
+        void Delete(Image image);
+        void Create(Image image);
     }
 }

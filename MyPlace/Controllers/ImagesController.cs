@@ -21,8 +21,12 @@ namespace MyPlace.Controllers
             _imagesService = imagesService;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Overview()
+        public async Task<IActionResult> Overview(string errorMessage)
         {
+            if (errorMessage != null)
+            {
+                ViewBag.ErrorMessage = errorMessage;
+            }
             var user = User;
             var userFromDb = await _userManager.FindByEmailAsync(user.Identity.Name);
             
@@ -32,14 +36,17 @@ namespace MyPlace.Controllers
 
             return View(viewImages);
         }
-        public async Task<IActionResult> Details(int id, string errorMessage)
+        public async Task<IActionResult> Details(int id, string errorMessage, string successMessage)
         {
             var image = _imagesService.GetById(id);
             if(errorMessage != null)
             {
                 ViewBag.ErrorMessage = errorMessage;
             }
-            
+            if (successMessage != null)
+            {
+                ViewBag.SuccessMessage = successMessage;
+            }
 
             if (image == null)
             {
@@ -80,6 +87,36 @@ namespace MyPlace.Controllers
 
             return RedirectToAction($"Details", new { id = imageViewModel.Id });
         }
-        
+        public IActionResult Delete(int id)
+        {
+            var imageFromDb = _imagesService.GetById(id);
+            if (imageFromDb == null)
+            {
+                return RedirectToAction("Overview", new { ErrorMessage = $"There is no hotel with Id: {id}." });
+            }
+
+            _imagesService.Delete(imageFromDb);
+
+            return RedirectToAction("Overview");
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateImageViewModel createImageViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction($"Overview", new { ErrorMessage = "There has been a mistake with your input. Please try again." });
+            }
+            var user = User;
+            var userFromDb = await _userManager.FindByEmailAsync(user.Identity.Name);
+
+            _imagesService.Create(createImageViewModel.ToModel(), userFromDb.Id);
+            return RedirectToAction("Overview", new { SuccessMessage = "The image has been successfylly created"});
+        }
     }
 }
