@@ -21,11 +21,15 @@ namespace MyPlace.Controllers
             _imagesService = imagesService;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Overview(string errorMessage)
+        public async Task<IActionResult> Overview(string errorMessage, string successMessage)
         {
             if (errorMessage != null)
             {
                 ViewBag.ErrorMessage = errorMessage;
+            }
+            if (successMessage != null)
+            {
+                ViewBag.SuccessMessage = successMessage;
             }
             var user = User;
             var userFromDb = await _userManager.FindByEmailAsync(user.Identity.Name);
@@ -61,7 +65,7 @@ namespace MyPlace.Controllers
             var imageFromDb = _imagesService.GetById(id);
             if (imageFromDb == null)
             {
-                return RedirectToAction("Error", "Home", new { ErrorMessage = $"There is no hotel with Id: {id}." });
+                return RedirectToAction("Overview", "Home", new { ErrorMessage = $"There is no hotel with Id: {id}." });
             }
 
             var user = User;
@@ -93,17 +97,26 @@ namespace MyPlace.Controllers
 
             if (!response.IsSuccessful)
             {
-                return RedirectToAction($"Details", new { ErrorMessage = response.Message });
+                return RedirectToAction($"Details/{imageViewModel.Id}", new { ErrorMessage = response.Message });
             }
 
             return RedirectToAction($"Details", new { id = imageViewModel.Id });
         }
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var imageFromDb = _imagesService.GetById(id);
             if (imageFromDb == null)
             {
                 return RedirectToAction("Overview", new { ErrorMessage = $"There is no hotel with Id: {id}." });
+            }
+
+            var user = User;
+            var userFromDb = await _userManager.FindByEmailAsync(user.Identity.Name);
+
+            var isAllowedToEdit = _imagesService.CouldEdit(imageFromDb.Id, userFromDb.Id);
+            if (!isAllowedToEdit)
+            {
+                return RedirectToAction("Overview", "Home", new { ErrorMessage = "You have no authorization to delete this image." });
             }
 
             _imagesService.Delete(imageFromDb);

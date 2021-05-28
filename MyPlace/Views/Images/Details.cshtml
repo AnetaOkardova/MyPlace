@@ -17,7 +17,12 @@
         @ViewBag.SuccessMessage
     </div>
 }
-
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-danger m-3" role="alert">
+        @ViewBag.Message
+    </div>
+}
 <h1>Details</h1>
 
 <div>
