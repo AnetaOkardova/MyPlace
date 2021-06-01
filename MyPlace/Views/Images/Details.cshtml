@@ -24,17 +24,13 @@
     </div>
 }
 <h1>Details</h1>
-
+<div>
+    <img style="width: 250px; height: 250px" src="@Model.ImageUrl" />
+</div>
 <div>
     <hr />
     <dl class="row">
 
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IsPrivate)
         </dt>
@@ -51,13 +47,18 @@
             @Html.DisplayNameFor(model => model.Username)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Username)
+            <a asp-action="Overview" asp-controller="Home" asp-route-userNameSearch="@Model.Username" class="card-text">@Model.Username</a>
         </dd>
     </dl>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) |
+@if (User.Identity.IsAuthenticated)
+{
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) |
 
+    </div>
+}
+<div>
     <a asp-action="Overview" asp-controller="Home">Back to home page</a>
 </div>

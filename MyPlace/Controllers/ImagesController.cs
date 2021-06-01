@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyPlace.Mappings;
 using MyPlace.Models;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyPlace.Controllers
 {
+    
     public class ImagesController : Controller
     {
         private readonly IImagesServices _imagesService;
@@ -59,6 +61,7 @@ namespace MyPlace.Controllers
             }
             return View(image.ToImageViewModel());
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -83,6 +86,7 @@ namespace MyPlace.Controllers
 
             return View(imageForView);
         }
+        [Authorize]
         [HttpPost]
         public  IActionResult Edit(ImageViewModel imageViewModel)
         {
@@ -102,6 +106,7 @@ namespace MyPlace.Controllers
 
             return RedirectToAction($"Details", new { id = imageViewModel.Id });
         }
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var imageFromDb = _imagesService.GetById(id);
@@ -123,12 +128,13 @@ namespace MyPlace.Controllers
 
             return RedirectToAction("Overview");
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CreateImageViewModel createImageViewModel)
         {
